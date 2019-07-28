@@ -2,10 +2,10 @@
 
             ##### 23 / 7 / 2019 #####
 
-########## inits ##########
-
+###########################
 import sqlite3 as sql
 
+########## Fx ##########
 
 def user_in_db(usrname):
 	if usrname in users:
@@ -13,14 +13,18 @@ def user_in_db(usrname):
 	else:
 		return False
 
+def get_num():
 
-
-
-
-
-
-
-
+	while True:
+		try:
+			num = input("enter number : ")
+			num = int(num)
+			if num > 3 or num < 1:
+				raise ValueError
+		except:
+			print("Unrecognized character, please try again")
+		else:
+			return num
 
 ########## Main ##########
 
@@ -36,23 +40,36 @@ while __name__=="__main__":
 
 	##### main #####
 
-	num = input("enter number : ")
+	num = get_num()
 
 	if num == 1:
-		print("then by all means please carry on")
-		usr = input("Enter username : ").lower()
+		while True:
+			try:
+				username = input("Enter Username : ").lower()
+				# logic for checking username
+				password = input(f"Enter Password for {username} : ").lower()
+				# logic for checking password
 
-	elif num == 2:
-		usr = input("create username : ")
-		while user_in_db(usr):
-			print("Sorry username already in use. Try again")
-			usr = input("create username : ")
+			except LookupError:
+				print("User not found, try again")
 
-		pass
-	elif num == 3:
-		break
+			else:
+				break
+		print("done corectly username and password are ",username,password)
 
-	else:
-		
-		pass
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	break
