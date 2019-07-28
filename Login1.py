@@ -2,6 +2,27 @@
 
             ##### 23 / 7 / 2019 #####
 
+########## inits ##########
+
+import sqlite3 as sql
+
+
+def user_in_db(usrname):
+	if usrname in users:
+		return True
+	else:
+		return False
+
+
+
+
+
+
+
+
+
+
+########## Main ##########
 
 while __name__=="__main__":
 
@@ -20,13 +41,12 @@ while __name__=="__main__":
 	if num == 1:
 		print("then by all means please carry on")
 		usr = input("Enter username : ").lower()
-		if usr in users:
-			pas = input("Enter password : ")
 
 	elif num == 2:
 		usr = input("create username : ")
-		if usr in users:
-			print("sorry username taken")
+		while user_in_db(usr):
+			print("Sorry username already in use. Try again")
+			usr = input("create username : ")
 
 		pass
 	elif num == 3:
@@ -35,3 +55,4 @@ while __name__=="__main__":
 	else:
 		
 		pass
+
