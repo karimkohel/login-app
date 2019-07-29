@@ -6,6 +6,8 @@
 
 import sqlite3 as sql
 from getpass import getpass
+import sys
+import hashlib
 
 ########## init ##########
 
@@ -20,19 +22,25 @@ def greet():
 	print("Do you ?")
 	print("1-have an account")
 	print("2-need an account")
-	print("3-want to exit!")
+	print("3-want to exit! (type 3 anywhere in app)")
 
 def user_in_db(usr):
-	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr})
+	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr}) 
 	try:
 		if usr in cursor.fetchone():
 			return True
 	except Exception:
 		return False
 
+def hash_this(pw):
+	psw = hashlib.sha512(pw.encode())
+	pw_hash = psw.hexdigest()
+	return pw_hash
+
 def pass_in_db(usr,pw):
+	pw_hash = hash_this(pw)
 	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr})
-	if pw in cursor.fetchone():
+	if pw_hash in cursor.fetchone():
 		return True
 	else:
 		return False
@@ -68,7 +76,7 @@ def login():
 
 		else:
 			break
-	print("Logged in with username and password ",username,password)
+	print("Logged in succesfully !!")
 
 def register():
 	while True:
@@ -83,7 +91,9 @@ def register():
 			if not password1 == password2:
 				raise ValueError
 
-			cursor.execute("INSERT INTO users VALUES (:username, :password)",{'username':username, 'password':password1})
+			pw_hash = hash_this(password1)
+
+			cursor.execute("INSERT INTO users VALUES (:username, :password)",{'username':username, 'password':pw_hash})
 
 		except LookupError:
 			print("User already exists,try a different username.")
@@ -92,12 +102,8 @@ def register():
 			print("Passwords do not match, try again.")
 
 		else:
-			print(f"registerd with username: {username} and password : {password1} ")
+			print(f"registerd with username: {username} succesfully !! ")
 			break
-
-def exit():
-	pass
-	#filler
 
 ########## Main ##########
 
@@ -113,21 +119,10 @@ if __name__=="__main__":
 	elif num == 2:
 		register()
 
+	elif num == 3:
+		sys.exit()
+
 
 	connection.commit()
 	connection.close()
 
-
-
-
-
-
-"""
-To Do:
-
-	finish database integration
-	encrypt passwords inside db
-	security checks 
-	final touches
-
-"""
