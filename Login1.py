@@ -15,10 +15,11 @@ connection = sql.connect('users.db')
 
 cursor = connection.cursor()
 
+
 ########## Fx ##########
 
 def greet():
-	print("########################################\n     Welcome to the secure app 0.1\n########################################\n")
+	print("########################################\n     Welcome to the secure app 1.0\n########################################\n")
 	print("Do you ?")
 	print("1-have an account")
 	print("2-need an account")
@@ -90,6 +91,8 @@ def register():
 
 			if not password1 == password2:
 				raise ValueError
+			if password_is_easy(username,password1) or len(password1) < 8:
+				raise AttributeError
 
 			pw_hash = hash_this(password1)
 
@@ -101,9 +104,32 @@ def register():
 		except ValueError:
 			print("Passwords do not match, try again.")
 
+		except AttributeError:
+			print("Password is too short or too easy\n -- passwords should be --\n-8 characters or more\n-not too common\n-not same as username")
+
 		else:
 			print(f"registerd with username: {username} succesfully !! ")
 			break
+
+def password_is_easy(usr,pw):
+
+	easy_passes = [
+		'12345678',
+		'123456789',
+		'1234567890',
+		'testing',
+		'Testing',
+		'password',
+		'password1'
+	]
+
+
+	if pw in easy_passes:
+		return True
+	elif pw == usr:
+		return True
+	else:
+		return False
 
 ########## Main ##########
 
