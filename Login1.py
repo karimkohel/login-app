@@ -19,11 +19,11 @@ cursor = connection.cursor()
 ########## Fx ##########
 
 def greet():
-	print("########################################\n     Welcome to the secure app 1.0\n########################################\n")
+	print("########################################\n     Welcome to the secure app 1.1\n########################################\n")
 	print("Do you ?")
 	print("1-have an account")
 	print("2-need an account")
-	print("3-want to exit! (type 3 anywhere in app)")
+	print("3-want to exit!")
 
 def user_in_db(usr):
 	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr}) 
