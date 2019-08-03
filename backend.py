@@ -9,25 +9,20 @@ def user_in_db(usr):
 	cursor = connection.cursor()
 
 	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr})
-	connection.commit()
-	connection.close()
 	try:
 		if usr in cursor.fetchone():
+			connection.close()
 			return True
 	except Exception:
+		connection.close()
 		return False
 
 
 def hash_this(pw):
 
-	connection = sql.connect('users.db')
-
-	cursor = connection.cursor()
-
 	psw = hashlib.sha512(pw.encode())
 	pw_hash = psw.hexdigest()
-	connection.commit()
-	connection.close()
+
 	return pw_hash 
 
 
@@ -39,11 +34,15 @@ def pass_in_db(usr,pw):
 
 	pw_hash = hash_this(pw)
 	cursor.execute("SELECT * FROM users WHERE username=:user",{'user':usr})
-	connection.commit()
-	connection.close()
-	if pw_hash in cursor.fetchone():
-		return True
-	else:
+	try:
+		if pw_hash in cursor.fetchone():
+			connection.close()
+			return True
+		else:
+			connection.close()
+			return False
+	except:
+		connection.close()
 		return False
 
 

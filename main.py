@@ -12,12 +12,11 @@ sfont = ("Helvetica", 12)
 ############## Fx ###############
 
 def login_page():
+	global llogin, luser, eusername, epassword, lpass, lb
 
 	L1.destroy()
 	B1.destroy()
 	B2.destroy()
-
-	global llogin, luser, eusername, epassword, lpass, lb
 
 	llogin = Label(root, text='Login', font=mfont)
 	llogin.grid(row=0, column=0, columnspan=2, pady=20)
@@ -46,20 +45,21 @@ def login():
 	username = eusername.get()
 	password = epassword.get()
 
-	llogin.destroy()
-	luser.destroy()
-	eusername.destroy()
-	epassword.destroy()
-	lpass.destroy()
-	lb.destroy()
+	if bk.pass_in_db(username, password):
 
-	if bk.user_in_db(username):
+		llogin.destroy()
+		luser.destroy()
+		eusername.destroy()
+		epassword.destroy()
+		lpass.destroy()
+		lb.destroy()
+
 		scs = Label(root, text='logged in as '+username, font=mfont)
 		scs.pack(pady=20)
-	else:
-		scs = Label(root, text='fail', font=mfont)
-		scs.pack(pady=20)
 
+	else:
+		eusername.delete(0,END)
+		epassword.delete(0,END)
 
 ############## main ###############
 
