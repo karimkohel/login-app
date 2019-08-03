@@ -1,54 +1,79 @@
-"""
+############## Imports ###############
 
-			main gui file for login app 2.0
-					31/7/2019
+from tkinter import *
+import backend as bk
 
+############## Inits ###############
 
-"""
+lfont = ("Helvetica", 18)
+mfont = ("Helvetica", 15)
+sfont = ("Helvetica", 12)
 
-#################### Imports ####################
+############## Fx ###############
 
-from appJar import gui
-app = gui('Login','500x300')
+def login_page():
 
-#################### FX ####################
+	L1.destroy()
+	B1.destroy()
+	B2.destroy()
 
+	global llogin, luser, eusername, epassword, lpass, lb
 
-#################### main Config ####################
+	llogin = Label(root, text='Login', font=mfont)
+	llogin.grid(row=0, column=0, columnspan=2, pady=20)
 
-app.setFont(15)
-app.setLocation("CENTER")
-app.setGuiPadding(20, 10)
-app.setBg('#36454f')
-app.setFg('#ededed')
+	luser = Label(root, text='Username :', font=sfont)
+	luser.grid(row=1, column=0, padx=15, pady=10)
 
-#################### main GUI ####################
+	eusername = Entry(root, width=30, borderwidth=3)
+	eusername.grid(row=1, column=1, padx=15, pady=10)
 
-		########## start screen ##########
+	lpass = Label(root, text='Password :', font=sfont)
+	lpass.grid(row=2, column=0, padx=15, pady=10)
 
-app.startFrame('start-page',0,0)
-app.addLabel('start-label','Welcome to Login app 2.0')
+	epassword = Entry(root, width=30, borderwidth=3, show='*')
+	epassword.grid(row=2, column=1, padx=15, pady=10)
 
-
-
-app.stopFrame()
-
-
-
-
-
-
-
-#################### GUI Config ####################
+	lb = Button(root, text='Login', command=login)
+	lb.grid(row=3, columnspan=2, pady=10)
 
 
+def register_page():
+	pass
+
+def login():
+
+	username = eusername.get()
+	password = epassword.get()
+
+	llogin.destroy()
+	luser.destroy()
+	eusername.destroy()
+	epassword.destroy()
+	lpass.destroy()
+	lb.destroy()
+
+	if bk.user_in_db(username):
+		scs = Label(root, text='logged in as '+username, font=mfont)
+		scs.pack(pady=20)
+	else:
+		scs = Label(root, text='fail', font=mfont)
+		scs.pack(pady=20)
 
 
+############## main ###############
+
+root = Tk()
+root.geometry("400x250+500+300")
+
+L1 = Label(root, text="Welcome to Login app 2.0", font=lfont)
+L1.pack(pady=20)
+
+B1 = Button(root, text='Login', command=login_page, width=10)
+B1.pack(pady=20)
+
+B2 = Button(root, text='Register', command=register_page, width=10)
+B2.pack(pady=20)
 
 
-
-
-
-
-#################### END ####################
-app.go()
+root.mainloop()
