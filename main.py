@@ -3,6 +3,8 @@
 from tkinter import *
 import backend as bk
 import tkinter.messagebox as msg
+import os
+
 
 ############## Inits ###############
 
@@ -12,8 +14,29 @@ sfont = ("Helvetica", 12)
 
 ############## Fx ###############
 
-def login_fail():
-	msg.showerror('Error', 'incorrect username or password')
+def exit():
+	if msg.askokcancel("Quit", "You want to quit now? *sniff*"):
+		root.destroy()
+
+def restart():
+	python = sys.executable
+	os.execl(python, python, * sys.argv)
+
+def how_to():
+	msg.showinfo('isn\'t it simple?',
+		'if you have an account login with your credentials, if you don\'t just register'
+		)
+
+def about_us():
+	msg.showinfo('Info',
+		'This is the work of Karim Kohel.\nstarted on the 2nd of june 2019 and finished after 3 months of procrastination on the 5th of july 2019\nfind me @karimkohel on instagram, or github for this project\'s repository\n\n  copyright © KarimKohel\n'
+		)
+
+def login_fail(scenario):
+	if scenario == 0:
+		msg.showerror('Error', 'enter username and password')
+	else:
+		msg.showerror('Error', 'incorrect username or password')
 
 def login_page():
 	global llogin, luser, eusername, epassword, lpass, lb
@@ -60,26 +83,52 @@ def login(*args, **kwargs):
 		lb.destroy()
 
 		scs = Label(root, text='logged in as '+username, font=mfont)
-		scs.pack(pady=20)
+		scs.grid(row=0,column=0, padx=60, pady=20)
+	elif username == '' or password == '':
+		eusername.delete(0,END)
+		epassword.delete(0,END)
+		login_fail(0)
 
 	else:
 		eusername.delete(0,END)
 		epassword.delete(0,END)
-		login_fail()
+		login_fail(1)
 
 ############## main ###############
-
+# main config
 root = Tk()
+root.title("Login app")
 root.geometry("400x250+500+300")
+if os.name == 'nt':
+	root.iconbitmap(root, default='ico.ico')
 
+# menubar creation
+menubar = Menu(root)
+root.config(menu=menubar)
+
+#menufile
+filemenu = Menu(menubar, tearoff=0)
+menubar.add_cascade(label='File', menu=filemenu)
+filemenu.add_command(label='New', command=restart)
+filemenu.add_command(label='Exit', command=exit)
+
+
+#helpmenu
+helpmenu = Menu(menubar, tearoff=0)
+menubar.add_cascade(label='Help', menu=helpmenu)
+helpmenu.add_command(label='User guide', command=how_to)
+helpmenu.add_command(label='About', command=about_us)
+
+
+# main page components
 L1 = Label(root, text="Welcome to Login app 2.0", font=lfont)
-L1.pack(pady=20)
+L1.grid(row=0, column=0, pady=20, padx=60)
 
 B1 = Button(root, text='Login', command=login_page, width=10)
-B1.pack(pady=20)
+B1.grid(row=1, column=0, pady=20, padx=60)
 
 B2 = Button(root, text='Register', command=register_page, width=10)
-B2.pack(pady=20)
+B2.grid(row=2, column=0, pady=20, padx=60)
 
 
 root.mainloop()
