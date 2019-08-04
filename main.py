@@ -2,6 +2,7 @@
 
 from tkinter import *
 import backend as bk
+import tkinter.messagebox as msg
 
 ############## Inits ###############
 
@@ -10,6 +11,9 @@ mfont = ("Helvetica", 15)
 sfont = ("Helvetica", 12)
 
 ############## Fx ###############
+
+def login_fail():
+	msg.showerror('Error', 'incorrect username or password')
 
 def login_page():
 	global llogin, luser, eusername, epassword, lpass, lb
@@ -33,14 +37,15 @@ def login_page():
 	epassword = Entry(root, width=30, borderwidth=3, show='*')
 	epassword.grid(row=2, column=1, padx=15, pady=10)
 
-	lb = Button(root, text='Login', command=login)
+	lb = Button(root, text='Login')
 	lb.grid(row=3, columnspan=2, pady=10)
-
+	lb.bind("<Button-1>", login)
+	root.bind("<Return>", login)
 
 def register_page():
 	pass
 
-def login():
+def login(*args, **kwargs):
 
 	username = eusername.get()
 	password = epassword.get()
@@ -60,6 +65,7 @@ def login():
 	else:
 		eusername.delete(0,END)
 		epassword.delete(0,END)
+		login_fail()
 
 ############## main ###############
 
