@@ -17,14 +17,12 @@ def user_in_db(usr):
 		connection.close()
 		return False
 
-
 def hash_this(pw):
 
 	psw = hashlib.sha512(pw.encode())
 	pw_hash = psw.hexdigest()
 
 	return pw_hash 
-
 
 def pass_in_db(usr,pw):
 
@@ -45,7 +43,6 @@ def pass_in_db(usr,pw):
 		connection.close()
 		return False
 
-
 def password_is_easy(usr,pw):
 
 	easy_passes = [
@@ -64,3 +61,14 @@ def password_is_easy(usr,pw):
 		return True
 	else:
 		return False
+
+def register(username, pw):
+	connection = sql.connect('users.db')
+	cursor = connection.cursor()
+
+	pw_hash = hash_this(pw)
+
+	cursor.execute("INSERT INTO users VALUES (:username, :password)",{'username':username, 'password':pw_hash})
+
+	connection.commit()
+	connection.close()
